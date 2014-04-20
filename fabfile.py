@@ -1,4 +1,9 @@
 from fabric.api import *
+from os import path
+import yaml
+
+stream = open("tna.yaml", 'r')
+conf = yaml.load(stream)
 
 env.hosts = ['srv1.tna.pf']
 
@@ -9,6 +14,9 @@ def filecopy(path, archive_name):
 def filedump():
     filecopy('/var/www/www.tna.pf', 'www.tna.pf')
     filecopy('/var/www/doc.tna.pf', 'doc.tna.pf')
+
+#def config():
+#    print conf['srv1.tna.pf']['config']
 
 def mysqldump(user, password, database):
     sudo('mysqldump -u %s -p%s %s > %s.sql' %(user, password, database, database))
