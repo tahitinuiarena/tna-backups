@@ -3,8 +3,9 @@ from fabric.api import *
 env.hosts = ['srv1.tna.pf']
 
 def filebackup():
-    sudo('cd /var/backups/fabric/files && tar -cvzf www.tna.pf.tar.gz /var/www/www.tna.pf')
-    sudo('cd /var/backups/fabric/files && tar -cvzf doc.tna.pf.tar.gz /var/www/doc.tna.pf')
+    with cd('/var/backups/fabric/files'):
+        sudo('tar -cvzf www.tna.pf.tar.gz /var/www/www.tna.pf')
+        sudo('tar -cvzf doc.tna.pf.tar.gz /var/www/doc.tna.pf')
 
 def mysqldump(user, password, database):
     sudo('mysqldump -u %s -p%s %s > %s.sql' %(user, password, database, database))
