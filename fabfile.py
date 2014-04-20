@@ -17,7 +17,8 @@ def dbdump(user,password):
         mysqldump(user, password, 'archivetnapf')
 
 def slapdump():
-    sudo ('cd /var/backups/fabric/db && slapcat > annuaire.ldif')
+    with cd('/var/backups/fabric/db'):
+        sudo ('slapcat > annuaire.ldif')
 
 def dbbackup(password):
     dbdump(password)
