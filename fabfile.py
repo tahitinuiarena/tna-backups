@@ -68,10 +68,18 @@ def dbbackup(password):
 def backup(hostname = 'all', what = 'all', password = ''):
     if hostname == 'all':
         for server in conf:
+            if conf[server]['config']['sudo'] == False:
+                env.user = 'root'
+            else:
+                env.user = conf[server]['config']['user']
             env.host_string = server
             getconfig(server, what, password)
     else:
         for server in conf:
+            if conf[server]['config']['sudo'] == False:
+                env.user = 'root'
+            else:
+                env.user = conf[server]['config']['user']
             if server == hostname:
                 env.host_string = server
                 getconfig(server, what, password)
