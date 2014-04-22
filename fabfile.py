@@ -7,7 +7,6 @@ conf = yaml.load(stream)
 
 def getconfig(server, what, password):
     if what == 'all':
-        # Tout les whats
         if 'ldap' in conf[server]:
             print 'LDAP'
             with cd('/var/backups/fabric/db'):
@@ -21,7 +20,6 @@ def getconfig(server, what, password):
         if 'files' in conf[server]:
             print 'FILE'
             with cd('/var/backups/fabric/files'):
-
                 for archives in conf[server]['files']:
                     directory = ''
                     for directories in conf[server]['files'][archives]:
@@ -83,4 +81,16 @@ def backup(hostname = 'all', what = 'all', password = ''):
             if server == hostname:
                 env.host_string = server
                 getconfig(server, what, password)
+
+@task
+def sync():
+    print "Copy files"
+    for server in conf:
+        env.host_string = server
+        local('mkdir -p data/'+server)
+        with cd('/var/backups/fabric/db'):
+            sudo('rm -fr *.bz2')
+            sudo('bzip2 *')
+            get('*.bz2','databases/')
+
 
