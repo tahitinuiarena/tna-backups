@@ -93,4 +93,16 @@ def sync():
             sudo('bzip2 *')
             get('*.bz2','databases/')
 
+@task
+def getfiles(what = 'all', password = '', sudoonly = 'false'):
+    for server in conf:
+        if sudoonly == 'true':
+            if conf[server]['config']['sudo'] == True:
+                env.host_string = server
+                getconfig(server, what, password)
+        else:
+            env.host_string = server
+            getconfig(server, what, password)
+
+
 
